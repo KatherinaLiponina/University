@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<project name="mispi" default="hello">
+	<property file="build.properties"/>
+	<target name="hello">
+		<echo>Hello, Katherine</echo>
+		<antcall target="clean"/>
+		<antcall target="run"/>
+	</target>
+	<target name="compile">
+		<mkdir dir="build/classes"/>
+		<javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
+	</target>
+	<target name="run" depends="compile">
+		<java classname="mispi.Main" classpath="build/classes"/>
+	</target>
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+	<target name="build" depends="compile">
+		<jar destfile="build/mispi.jar" basedir="build/classes">
+			<manifest>
+				<attribute name="Main-Class" value="${Main-Class}"/>
+				<attribute name="Version" value="${version}" />
+			</manifest>
+		</jar>
+	</target>
+</project>
