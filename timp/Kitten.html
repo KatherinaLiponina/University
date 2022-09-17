@@ -1,0 +1,118 @@
+<!doctype html>
+    <html>
+        <head>
+            <title>Мой сайт</title>
+        </head>
+        <body>
+
+        <script type="text/javascript">
+
+	    var blockAll = true;
+	
+	    function setBlock() {
+		document.ondragstart = noselect;
+  	        document.onselectstart = noselect;
+  	        document.oncontextmenu = noselect;
+  	        function noselect() {return false;}
+	    }
+	    setBlock();
+	    function dropBlock() {
+		document.ondragstart = null;
+  	        document.onselectstart = null;
+  	        document.oncontextmenu = null;
+  	        function noselect() {return true;}
+	    }
+
+	    var makeCRCTable = function(){
+    		var c;
+    		var crcTable = [];
+    		for(var n =0; n < 256; n++){
+        	    c = n;
+        	    for(var k =0; k < 8; k++){
+            	        c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+        	    }
+        	    crcTable[n] = c;
+            	}
+    		return crcTable;
+	    }
+	    var crc32 = function(str) {
+    		var crcTable = window.crcTable || (window.crcTable = makeCRCTable());
+    		var crc = 0 ^ (-1);
+
+    		for (var i = 0; i < str.length; i++ ) {
+        	    crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
+    		}
+		return (crc ^ (-1)) >>> 0;
+	    };
+
+ 	    document.onkeydown = function() {
+		    if(event.ctrlKey == true && event.keyCode == 83) {
+			event.preventDefault();
+		    }
+	    }
+
+	    var cssNode2 = document.createElement('style'); 
+	    cssNode2.type = 'text/css'; 
+	    cssNode2.media = 'screen'; 
+	    cssNode2.innerHTML ='div{-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}';
+	    document.head.appendChild(cssNode2);
+	    document.body.style.cssText="-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;";
+ 	
+	    //размыть
+	    function toBlur() {
+		if (blockAll) {
+		    document.body.style.cssText="-webkit-filter: blur(5px);-moz-filter: blur(5px);-ms-filter: blur(5px);-o-filter: blur(5px);filter: blur(5px);"
+		}
+	    }
+	    //вернуть
+	    function toClear() {
+		if (blockAll) {
+		    document.body.style.cssText="-webkit-filter: blur(0px);-moz-filter: blur(0px);-ms-filter: blur(0px);-o-filter: blur(0px);filter: blur(0px);"
+		}
+	    }
+
+	    document.onclick = function(event){
+ 		    toClear();
+	    }
+ 
+	    document.onmouseleave = function(event){
+		toBlur();
+	    }
+
+	    document.onblur = function(event){
+ 		    toBlur();
+	    }
+	    //поймать принт скрин
+	    document.addEventListener('keyup', (e) => {
+    		if (e.key == 'PrintScreen' && blockAll) {
+        	    navigator.clipboard.writeText('');
+    		}
+		if (e.key == "Escape") {
+		    var password = prompt('Enter password', 'qwerty');
+		    if (crc32(password) != '3421846044') {
+			alert("Oops, wrong password");
+		    }
+		    else {
+		    	if (blockAll == true) {
+			    dropBlock();
+		    	}
+		    	else {
+			    setBlock();
+		    	}
+ 		    	blockAll = !blockAll;
+		    }
+		}
+	    });
+
+	</script>
+
+            <h1>Привет, человек!</h1>
+            <p>Нельзя копировать ничего с этого сайта.</p>
+            <p>Попробуй сам.</p>
+	    <p>Но если нажмешь esc, то можно.</p>
+	    <p>Такие дела.</p>
+	    <img src="kitten.jpg" width="500" alt="kitten">
+	    <p>P.S. What do you think is <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">here</a>?</p>
+	
+        </body>
+    </html>
