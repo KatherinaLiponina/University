@@ -1,3 +1,3 @@
 # University
-Made in University:
+Made at University:
 Все достаточно интересные работы, которые были сделаны мной в университете
